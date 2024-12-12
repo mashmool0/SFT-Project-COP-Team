@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 
     # My Apps
     'home',
+    'event',
 ]
 
 MIDDLEWARE = [
