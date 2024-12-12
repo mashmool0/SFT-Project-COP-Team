@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>صفحه اصلی - COP Events</title>
+    <style>
+        /* استایل‌های سفارشی */
+        body {
+            font-family: 'Vazir', sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+        }
+
+        .events-list {
+            margin-top: 50px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- هدر ثابت -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">COP Events</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">خانه</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">رویدادها</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">درباره ما</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">تماس با ما</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- بخش اصلی و بروزر سایت -->
+<div class="hero-section">
+    <div class="container">
+        <h1>رویداد مورد نظرتان را پیدا کنید</h1>
+        <p class="lead">با کمک تیم COP بهترین رویدادهای دانشگاهی را بیابید و شرکت کنید</p>
+        <button class="btn btn-light btn-lg mt-3">جستجوی پیشرفته</button>
+    </div>
+</div>
+
+<!-- لیست ایونت‌ها -->
+<div class="container events-list">
+    <h2 class="text-center my-5">لیست ایونت‌ها</h2>
+    <div class="row">
+        <!-- فیلتر هوشمند -->
+        <div class="col-md-3">
+            <h5>فیلترها</h5>
+            <form>
+                <div class="mb-3">
+                    <label for="dateFilter" class="form-label">تاریخ برگزاری</label>
+                    <input type="date" class="form-control" id="dateFilter">
+                </div>
+                <div class="mb-3">
+                    <label for="typeFilter" class="form-label">نوع رویداد</label>
+                    <select class="form-select" id="typeFilter">
+                        <option selected>همه</option>
+                        <option value="1">کارگاه</option>
+                        <option value="2">سمینار</option>
+                        <option value="3">کنفرانس</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">اعمال فیلترها</button>
+            </form>
+        </div>
+
+        <!-- لیست رویدادها -->
+        <div class="col-md-9">
+            <div class="row">
+                <!-- ایونت ۱ -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/400x200" class="card-img-top" alt="عکس رویداد ۱">
+                        <div class="card-body">
+                            <h5 class="card-title">رویداد شماره ۱</h5>
+                            <p class="card-text">توضیحات کوتاه از رویداد اول</p>
+                            <p class="card-text"><small class="text-muted">تاریخ: ۱۴۰۳/۰۲/۲۵</small></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- ایونت ۲ -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/400x200" class="card-img-top" alt="عکس رویداد ۲">
+                        <div class="card-body">
+                            <h5 class="card-title">رویداد شماره ۲</h5>
+                            <p class="card-text">توضیحات کوتاه از رویداد دوم</p>
+                            <p class="card-text"><small class="text-muted">تاریخ: ۱۴۰۳/۰۳/۱۰</small></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- ایونت ۳ -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/400x200" class="card-img-top" alt="عکس رویداد ۳">
+                        <div class="card-body">
+                            <h5 class="card-title">رویداد شماره ۳</h5>
+                            <p class="card-text">توضیحات کوتاه از رویداد سوم</p>
+                            <p class="card-text"><small class="text-muted">تاریخ: ۱۴۰۳/۰۳/۲۰</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- اسکریپت‌های Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
