@@ -1,6 +1,8 @@
+# home/views.py
 from django.shortcuts import render
+from .models import Event
 
 
-# Create your views here.
 def home_view(request):
-    return render(request, 'home/home.html', context={})
+    events = Event.objects.all()
+    return render(request, 'home/home.html', context={'events': events})
