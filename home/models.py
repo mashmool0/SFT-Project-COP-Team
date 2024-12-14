@@ -1,4 +1,5 @@
 from django.db import models
+from event.models import University
 
 
 class Speaker(models.Model):
@@ -20,6 +21,7 @@ class Event(models.Model):
     kondaktor = models.TextField(blank=True, null=True)
     speakers = models.ManyToManyField(Speaker, related_name='events')
     likes = models.PositiveIntegerField(default=0)
+    university = models.ForeignKey(University, models.SET_NULL, related_name='event_uni', blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -28,8 +30,6 @@ class Event(models.Model):
 class Comment(models.Model):
     COMMENT_TYPE_CHOICES = [
         ('general', 'نظرات عادی'),
-        ('question', 'سؤالات'),
-        ('suggestion', 'پیشنهادات'),
         ('approved', 'نظرات تایید شده'),
         ('expert', 'نظرات متخصصین'),
         ('ai', 'نظر هوش مصنوعی'),
@@ -42,4 +42,4 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.get_comment_type_display()} - {self.text[:30]}'
+        return f'{self.get_comment_type_display()} - {self.text[:30]} {self.event.title}'

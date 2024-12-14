@@ -77,26 +77,66 @@
                 <div class="card-body">
                     <h2 class="card-title">{{ event.title }}</h2>
                     <p class="card-text">{{ event.description }}</p>
+
+                    <!-- اطلاعات دانشگاه -->
+                    {% if university %}
+                        <hr>
+                        <h4>دانشگاه برگزارکننده</h4>
+                        <p>{{ university.name }}</p>
+                        <p>{{ university.description }}</p>
+                    {% endif %}
+
+                    <!-- اطلاعات کنداکتور -->
+                    {% if event.kondaktor %}
+                        <hr>
+                        <h4>کنداکتور رویداد</h4>
+                        <p>{{ event.kondaktor }}</p>
+                    {% else %}
+                        <p>اطلاعات کنداکتور برای این رویداد موجود نیست.</p>
+                    {% endif %}
+
+                    <!-- نمایش سخنرانان -->
                     <hr>
                     <h4>سخنرانان</h4>
                     <ul class="list-inline">
                         {% for speaker in speakers %}
                             <li class="list-inline-item">
                                 <img src="{{ speaker.image.url }}" alt="Speaker Image" class="speaker-img">
-                                <span>{{ speaker.name }}</span>
+                                <span>{{ speaker.fullname }}</span>
+                                {% if speaker.linkedin_url %}
+                                    <a href="{{ speaker.linkedin_url }}" target="_blank">لینکدین</a>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>
+
+                    <!-- نظرات -->
                     <hr>
                     <h4>نظرات</h4>
-                    {% for comment in comments %}
-                        <div class="comment-box">
-                            <p><strong>{{ comment.user_name }}:</strong> {{ comment.text }}</p>
-                        </div>
-                    {% endfor %}
-                    <hr>
+                    {% if comments %}
+                        {% for comment in comments %}
+                            <div class="comment-box {% if comment.comment_type == 'general' %} bg-light {% elif comment.comment_type == 'approved' %} border border-success {% elif comment.comment_type == 'expert' %} border border-warning {% elif comment.comment_type == 'ai' %} bg-info text-white {% endif %}"
+                                 dir="rtl">
+                                <p><strong>{{ comment.get_comment_type_display }}:</strong> {{ comment.text }}</p>
+                                <p class="text-muted small">تاریخ: {{ comment.created_at|date:"Y-m-d H:i" }}</p>
+                                {% if comment.comment_type == 'general' %}
+                                    <p class="small">نظرات عادی شامل بازخوردهای عمومی از شرکت‌کنندگان است.</p>
+                                {% elif comment.comment_type == 'approved' %}
+                                    <p class="small">نظرات تایید شده نشان‌دهنده نظراتی است که توسط مدیران تأیید
+                                        شده‌اند.</p>
+                                {% elif comment.comment_type == 'expert' %}
+                                    <p class="small">نظرات متخصصین تحلیل‌های عمیق‌تر و کارشناسی را ارائه می‌دهند.</p>
+                                {% elif comment.comment_type == 'ai' %}
+                                    <p class="small">این نظر از سوی سیستم‌های هوش مصنوعی ارائه شده است.</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>هیچ نظری ثبت نشده است.</p>
+                    {% endif %}
+
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="like-count">تعداد لایک‌ها: {{ event.likes_count }}</span>
+                        <span class="like-count">تعداد لایک‌ها: {{ event.likes }}</span>
                         <button class="btn btn-like">لایک</button>
                     </div>
                 </div>
