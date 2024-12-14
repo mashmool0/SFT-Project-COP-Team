@@ -1,0 +1,22 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                {% if speaker.image %}
+                    <img src="{{ speaker.image.url }}" class="img-fluid" alt="{{ speaker.fullname }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" class="img-fluid" alt="Default Image">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <h2>{{ speaker.fullname }}</h2>
+                <p>{{ speaker.description }}</p>
+                {% if speaker.linkedin_url %}
+                    <a href="{{ speaker.linkedin_url }}" class="btn btn-link" target="_blank">لینکدین</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

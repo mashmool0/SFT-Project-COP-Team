@@ -31,7 +31,7 @@
     }
 </style>
 <!-- header.html -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top ">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top mb-5">
     <div class="container">
         <a class="navbar-brand" href="#">COP Events</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -47,7 +47,7 @@
                     <a class="nav-link" href="#">رویدادها</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">درباره ما</a>
+                    <a class="nav-link" href="{% url 'event:speaker_list' %}">سخنران ها</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">تماس با ما</a>

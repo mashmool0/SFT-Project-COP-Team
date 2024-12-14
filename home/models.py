@@ -19,7 +19,7 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='event_image/')
     kondaktor = models.TextField(blank=True, null=True)
-    speakers = models.ManyToManyField(Speaker, related_name='events')
+    speakers = models.ManyToManyField(Speaker, related_name='event_speaker')
     likes = models.PositiveIntegerField(default=0)
     university = models.ForeignKey(University, models.SET_NULL, related_name='event_uni', blank=True, null=True)
 
@@ -29,9 +29,9 @@ class Event(models.Model):
 
 class Comment(models.Model):
     COMMENT_TYPE_CHOICES = [
-        ('general', 'نظرات عادی'),
-        ('approved', 'نظرات تایید شده'),
-        ('expert', 'نظرات متخصصین'),
+        ('general', 'نظر عادی'),
+        ('approved', 'نظر تایید شده'),
+        ('expert', 'نظر متخصص'),
         ('ai', 'نظر هوش مصنوعی'),
         # Add more types as needed
     ]
