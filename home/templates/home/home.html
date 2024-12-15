@@ -95,33 +95,34 @@
                     <input type="date" class="form-control" id="dateFilter">
                 </div>
                 <div class="mb-3">
-                    <label for="typeFilter" class="form-label">نوع رویداد</label>
-                    <select class="form-select" id="typeFilter">
-                        <option selected>همه</option>
-                        <option value="1">کارگاه</option>
-                        <option value="2">سمینار</option>
-                        <option value="3">کنفرانس</option>
+                    <label for="eventTypeFilter" class="form-label">نوع رویداد</label>
+                    <select class="form-select" name="event_type" id="eventTypeFilter">
+                        <option value="" selected>همه</option>
+                        <option value="workshop">کارگاه</option>
+                        <option value="seminar">سمینار</option>
+                        <option value="conference">کنفرانس</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="majorFilter" class="form-label">رشته</label>
+                    <select class="form-select" name="major" id="majorFilter">
+                        <option value="" selected>همه</option>
+                        {% for major in majors %}
+                            <option value="{{ major.id }}">{{ major.name }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="universityTypeFilter" class="form-label">نوع دانشگاه</label>
-                    <select class="form-select" id="universityTypeFilter">
-                        <option selected>همه</option>
+                    <select class="form-select" name="university" id="universityTypeFilter">
+                        <option value="" selected>همه</option>
                         {% for university in universities %}
                             <option value="{{ university.id }}">{{ university.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="courseTypeFilter" class="form-label">نوع دوره</label>
-                    <select class="form-select" id="courseTypeFilter">
-                        <option selected>همه</option>
-                        <option value="1">کارشناسی</option>
-                        <option value="2">کارشناسی ارشد</option>
-                        <option value="3">دکتری</option>
-                    </select>
-                </div>
                 <button type="submit" class="btn btn-primary">اعمال فیلترها</button>
+
             </form>
         </div>
 

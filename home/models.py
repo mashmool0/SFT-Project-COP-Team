@@ -1,5 +1,5 @@
 from django.db import models
-from event.models import University
+from event.models import University, Major
 
 
 class Speaker(models.Model):
@@ -13,6 +13,15 @@ class Speaker(models.Model):
 
 
 class Event(models.Model):
+    TYPE_OF_EVENT = (
+        ("kargah", "کارگاه"),
+        ("seminar", "سمینار"),
+        ("conferance", "کنفرانس"),
+        ("dore", "دوره"),
+        ("webinar", "وبینار"),
+        ("bootcamp", "بوتکمپ"),
+    )
+
     title = models.CharField(max_length=100)
     small_desc = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -22,6 +31,8 @@ class Event(models.Model):
     speakers = models.ManyToManyField(Speaker, related_name='event_speaker')
     likes = models.PositiveIntegerField(default=0)
     university = models.ForeignKey(University, models.SET_NULL, related_name='event_uni', blank=True, null=True)
+    type_of_event = models.CharField(choices=TYPE_OF_EVENT, blank=True, null=True, max_length=100)
+    major = models.ForeignKey(Major, on_delete=models.SET_NULL, related_name='event_major', blank=True, null=True)
 
     def __str__(self):
         return self.title

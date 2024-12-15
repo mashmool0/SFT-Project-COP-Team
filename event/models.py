@@ -9,3 +9,11 @@ class University(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class Major(models.Model):
+    name = models.CharField(max_length=255)
+    desc = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.name}'
