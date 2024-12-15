@@ -1,7 +1,7 @@
 asgiref==3.8.1
 certifi==2024.12.14
 charset-normalizer==3.4.0
-dj-config-url==0.1.1
+dj-database-url==2.3.0
 Django==5.1.4
 django-multiselectfield==0.1.13
 Faker==33.1.0
