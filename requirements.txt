@@ -1,6 +1,7 @@
 asgiref==3.8.1
 certifi==2024.12.14
 charset-normalizer==3.4.0
+dj-config-url==0.1.1
 Django==5.1.4
 django-multiselectfield==0.1.13
 Faker==33.1.0
@@ -8,9 +9,13 @@ idna==3.10
 jalali_core==1.0.0
 jdatetime==5.0.0
 pillow==11.0.0
+psycopg2==2.9.10
 python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
 requests==2.32.3
+setuptools==75.6.0
 six==1.17.0
 sqlparse==0.5.3
 typing_extensions==4.12.2
 urllib3==2.2.3
+wheel==0.45.1
