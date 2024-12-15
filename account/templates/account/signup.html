@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت نام</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Vazir, Tahoma, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(120deg, #2980b9, #8e44ad);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .signup-form {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #2980b9;
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #3498db;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+
+        .messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .message {
+            padding: 15px 25px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            color: white;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .error {
+            background-color: #e91e63;
+        }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .signup-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <h1>سیستم مدیریت کاربران</h1>
+</header>
+
+<div class="container">
+    <form class="signup-form" method="POST">
+        {% csrf_token %}
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <h2 style="margin-bottom: 20px; text-align: center;">ثبت نام</h2>
+
+        <div class="form-group">
+            <label for="username">نام کاربری</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">رمز عبور</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm-password">تکرار رمز عبور</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+        </div>
+
+        <button type="submit" class="submit-btn">ثبت نام</button>
+
+        <div class="login-link">
+            قبلاً ثبت نام کرده‌اید؟ <a href="">ورود</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.signup-form');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
+        const username = document.getElementById('username');
+
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+            let errorMessage = '';
+
+            if (username.value.length < 3) {
+                errorMessage = 'نام کاربری باید حداقل ۳ حرف باشد';
+                isValid = false;
+            }
+
+            if (password.value.length < 6) {
+                errorMessage = 'رمز عبور باید حداقل ۶ کاراکتر باشد';
+                isValid = false;
+            }
+
+            if (password.value !== confirmPassword.value) {
+                errorMessage = 'رمز عبور و تکرار آن مطابقت ندارند';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                showMessage(errorMessage, 'error');
+            }
+        });
+
+        function showMessage(message, type) {
+            const messagesDiv = document.querySelector('.messages') || createMessagesDiv();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+
+            setTimeout(() => {
+                messageDiv.remove();
+                if (!messagesDiv.children.length) {
+                    messagesDiv.remove();
+                }
+            }, 3000);
+        }
+
+        function createMessagesDiv() {
+            const div = document.createElement('div');
+            div.className = 'messages';
+            document.body.appendChild(div);
+            return div;
+        }
+    });
+</script>
+</body>
+</html>

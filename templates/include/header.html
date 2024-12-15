@@ -43,12 +43,23 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home:home' %}">خانه</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'event:speaker_list' %}">سخنران ها</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">تماس با ما</a>
                 </li>
+                {% if not request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:signup' %}">ثبت نام یا لاگین</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:signup' %}"
+                           style="color: red;solid-color: red">خروج</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
