@@ -1,88 +1,277 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.title }} | جزئیات رویداد</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>جزئیات رویداد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Vazir', sans-serif;
-            background-color: #f7f9fc;
-            color: #333;
+            font-family: 'Vazirmatn', sans-serif;
+            background: #f0f2f5;
+            color: #1a1a1a;
         }
 
-        .card {
-            border: none;
-            border-radius: 12px;
+        .main-container {
+            margin-top: 80px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
             overflow: hidden;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
 
-        .header {
-            background-color: #007bff;
-            padding: 15px 0;
-            text-align: center;
+        .event-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 2rem;
             color: white;
-            border-radius: 12px 12px 0 0;
+            text-align: center;
         }
 
-        .header h1 {
-            margin: 0;
-            font-size: 2rem;
+        .event-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .event-type-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .event-image-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
         }
 
         .event-image {
-            max-width: 100%;
-            height: auto;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
-        .section {
-            background-color: #ffffff;
+        .event-image:hover {
+            transform: scale(1.05);
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #4f46e5;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            font-size: 1.2rem;
+        }
+
+        .speaker-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 1rem;
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
         }
 
-        .section h4 {
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
-            color: #007bff;
+        .speaker-card:hover {
+            transform: translateX(-5px);
+            background: #f1f5f9;
         }
 
-        .speaker-img {
-            width: 50px;
-            height: 50px;
+        .speaker-image {
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
-            margin-right: 10px;
+            object-fit: cover;
+            border: 3px solid #4f46e5;
+        }
+
+        .speaker-info {
+            flex: 1;
+        }
+
+        .linkedin-link {
+            color: #0077b5;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .linkedin-link:hover {
+            color: #004182;
         }
 
         .comment-box {
-            background-color: #f9f9f9;
+            background: #f8fafc;
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-right: 4px solid #4f46e5;
+            transition: all 0.3s ease;
         }
 
-        .like-count {
-            font-size: 1.2rem;
-            color: #007bff;
+        .comment-box:hover {
+            background: #f1f5f9;
+            transform: translateX(-5px);
         }
 
-        .btn-like {
-            background-color: #e9ecef;
-            color: #007bff;
-            transition: background-color 0.3s;
+        .like-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-top: 2rem;
         }
 
-        .btn-like:hover {
-            background-color: #007bff;
-            color: #fff;
+        .like-button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .like-button:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .kondaktor-content {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            white-space: pre-line;
+        }
+
+        .event-date-section {
+            background: #f8fafc;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .date-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .date-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            color: #4f46e5;
+        }
+
+        .date-info .time {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .add-to-calendar {
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-calendar:hover {
+            background: #4338ca;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .event-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 3.5rem 2rem; /* افزایش padding */
+            color: white;
+            text-align: center;
+        }
+
+        .event-image-container {
+            position: relative;
+            height: 600px; /* افزایش ارتفاع از 400px به 600px */
+            overflow: hidden;
+        }
+
+        .event-title {
+            font-size: 3rem; /* افزایش سایز فونت */
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .event-type-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem; /* افزایش padding */
+            border-radius: 50px;
+            font-size: 1rem; /* افزایش سایز فونت */
+            display: inline-block;
         }
     </style>
 </head>
@@ -90,84 +279,161 @@
 
 {% include 'include/header.html' %}
 
-<!-- محتوای اصلی -->
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card mb-4 shadow-sm">
-                <img src="{{ event.image.url }}" alt="Event Image" class="event-image">
-                <div class="card-body">
+<div class="container main-container">
+    <div class="event-card" data-aos="fade-up">
+        <div class="event-header">
+            <h1 class="event-title">{{ event.title }}</h1>
+            <span class="event-type-badge">
+                <i class="fas fa-calendar-alt"></i>
+                {{ event.get_type_of_event_display }}
+            </span>
+        </div>
 
-                    <div class="header">
-                        <h2 class="card-title">{{ event.title }}</h2>
+        <div class="event-image-container">
+            <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-image">
+        </div>
+
+        <div class="container py-4">
+            <div class="event-date-section">
+                <div class="date-content">
+                    <div class="date-info">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>{{ event.date_of_event|date:"Y/m/d" }}</span>
+                        <span class="time">{{ event.date_of_event|date:"H:i" }}</span>
                     </div>
-
-                    <p class="card-text mt-3">{{ event.description }}</p>
-
-                    <!-- بخش اطلاعات دانشگاه -->
-                    <div class="section">
-                        {% if university %}
-                            <h4>دانشگاه برگزارکننده</h4>
-                            <p><strong>{{ university.name }}</strong></p>
-                            <p>{{ university.description }}</p>
-                        {% else %}
-                            <p>اطلاعات دانشگاهی برای این رویداد موجود نیست.</p>
-                        {% endif %}
+                    <a href="#" class="add-to-calendar" id="googleCalendarBtn">
+                        <i class="fab fa-google"></i>
+                        افزودن به تقویم گوگل
+                    </a>
+                </div>
+            </div>
+            <div class="event-meta">
+                {% if event.major %}
+                    <div class="meta-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>رشته: {{ event.major.name }}</span>
                     </div>
+                {% endif %}
+                <div class="meta-item">
+                    <i class="far fa-clock"></i>
+                    <span>تاریخ ایجاد: {{ event.created_at|date:"Y/m/d" }}</span>
+                </div>
+            </div>
+            <div class="info-section" data-aos="fade-up">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    توضیحات رویداد
+                </h2>
+                <p>{{ event.description }}</p>
+            </div>
 
-                    <!-- بخش کنداکتور -->
-                    <div class="section">
-                        <h4>کنداکتور رویداد</h4>
-                        {% if event.kondaktor %}
-                            <p>{{ event.kondaktor }}</p>
-                        {% else %}
-                            <p>اطلاعات کنداکتور برای این رویداد موجود نیست.</p>
-                        {% endif %}
-                    </div>
+            {% if university %}
+                <div class="info-section" data-aos="fade-up">
+                    <h2 class="section-title">
+                        <i class="fas fa-university"></i>
+                        دانشگاه برگزارکننده
+                    </h2>
+                    <h3>{{ university.name }}</h3>
+                    {% if university.description %}
+                        <p>{{ university.description }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
 
-                    <!-- بخش سخنرانان -->
-                    <div class="section">
-                        <h4>سخنرانان</h4>
-                        <ul class="list-inline">
-                            {% for speaker in speakers %}
-                                <li class="list-inline-item">
-                                    <img src="{{ speaker.image.url }}" alt="Speaker Image" class="speaker-img">
-                                    <span>{{ speaker.fullname }}</span>
-                                    {% if speaker.linkedin_url %}
-                                        <a href="{{ speaker.linkedin_url }}" target="_blank">لینکدین</a>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-
-                    <!-- بخش نظرات -->
-                    <!-- بخش نظرات -->
-                    <div class="section">
-                        <h4>نظرات</h4>
-                        {% if comments %}
-                            {% for comment in comments %}
-                                <div class="comment-box" dir="rtl"> <!-- اضافه کردن dir="rtl" برای ترتیب صحیح متن -->
-                                    <p><strong>{{ comment.get_comment_type_display }}:</strong> {{ comment.text }}</p>
-                                    <p class="text-muted small">تاریخ: {{ comment.created_at|date:"Y-m-d H:i" }}</p>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <p>هیچ نظری ثبت نشده است.</p>
-                        {% endif %}
-                    </div>
-
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="like-count">تعداد لایک‌ها: {{ event.likes }}</span>
-                        <button class="btn btn-like">لایک</button>
+            {% if event.kondaktor %}
+                <div class="info-section" data-aos="fade-up">
+                    <h2 class="section-title">
+                        <i class="fas fa-stream"></i>
+                        کنداکتور رویداد
+                    </h2>
+                    <div class="kondaktor-content">
+                        {{ event.kondaktor }}
                     </div>
                 </div>
+            {% endif %}
+
+            <div class="info-section" data-aos="fade-up">
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i>
+                    سخنرانان
+                </h2>
+                {% for speaker in speakers %}
+                    <div class="speaker-card">
+                        <img src="{{ speaker.image.url }}" alt="{{ speaker.fullname }}" class="speaker-image">
+                        <div class="speaker-info">
+                            <h3>{{ speaker.fullname }}</h3>
+                            {% if speaker.linkedin_url %}
+                                <a href="{{ speaker.linkedin_url }}" target="_blank" class="linkedin-link">
+                                    <i class="fab fa-linkedin"></i>
+                                    مشاهده پروفایل لینکدین
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="info-section" data-aos="fade-up">
+                <h2 class="section-title">
+                    <i class="far fa-comments"></i>
+                    نظرات
+                </h2>
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="comment-box">
+                            <h4>{{ comment.get_comment_type_display }}</h4>
+                            <p>{{ comment.text }}</p>
+                            <small class="text-muted">{{ comment.created_at|date:"Y/m/d H:i" }}</small>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>هنوز نظری ثبت نشده است.</p>
+                {% endif %}
+            </div>
+
+            <div class="like-section">
+<span class="like-count">
+<i class="fas fa-heart" style="color: #ef4444"></i>
+{{ event.likes }} لایک
+</span>
+                <button class="like-button">
+                    <i class="fas fa-heart"></i>
+                    لایک کردن
+                </button>
             </div>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        once: true
+    });
+
+    document.querySelector('.like-button').addEventListener('click', function () {
+        this.classList.add('animate__animated', 'animate__heartBeat');
+        setTimeout(() => {
+            this.classList.remove('animate__animated', 'animate__heartBeat');
+        }, 1000);
+    });
+    document.getElementById('googleCalendarBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const event = {
+            title: '{{ event.title }}',
+            details: '{{ event.small_desc }}',
+            location: '{{ university.name|default:"" }}',
+            start: '{{ event.date_of_event|date:"c" }}'
+        };
+
+        const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&details=${encodeURIComponent(event.details)}&location=${encodeURIComponent(event.location)}&dates=${event.start.replace(/[-:]/g, '')}/${event.start.replace(/[-:]/g, '')}`;
+
+        window.open(googleCalendarUrl, '_blank');
+    });
+
+</script>
 </body>
 </html>

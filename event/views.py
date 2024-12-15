@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from home.models import Event, Speaker
+from home.models import Event, Speaker, Comment
 from .models import University  # فرض بر این است که مدل دانشگاه تعریف شده باشد
 
 
@@ -34,3 +34,5 @@ def speaker_detail(request, pk):
         return render(request, 'event/speaker_detail.html', {'speaker': speaker})
     except Speaker.DoesNotExist:
         return redirect("home:home")
+
+
