@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ثبت نام</title>
+    <title>ورود به سیستم</title>
     <style>
         * {
             margin: 0;
@@ -36,64 +36,89 @@
             padding: 20px;
         }
 
-        .signup-form {
+        .login-form {
             background: white;
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #2980b9, #8e44ad);
         }
 
         .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: #333;
+            font-weight: 500;
         }
 
         .form-group input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
 
         .form-group input:focus {
             border-color: #2980b9;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.1);
         }
 
         .submit-btn {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: #2980b9;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            margin-top: 10px;
         }
 
         .submit-btn:hover {
             background: #3498db;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(41, 128, 185, 0.2);
         }
 
-        .login-link {
+        .signup-link {
             text-align: center;
             margin-top: 20px;
             color: #666;
         }
 
-        .login-link a {
+        .signup-link a {
             color: #2980b9;
             text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .signup-link a:hover {
+            color: #3498db;
         }
 
         .messages {
@@ -106,9 +131,10 @@
         .message {
             padding: 15px 25px;
             margin-bottom: 10px;
-            border-radius: 4px;
+            border-radius: 8px;
             color: white;
             animation: slideIn 0.5s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .error {
@@ -131,7 +157,7 @@
         }
 
         @media (max-width: 480px) {
-            .signup-form {
+            .login-form {
                 padding: 20px;
             }
         }
@@ -143,7 +169,7 @@
 </header>
 
 <div class="container">
-    <form class="signup-form" method="POST">
+    <form class="login-form" method="POST">
         {% csrf_token %}
 
         {% if messages %}
@@ -156,7 +182,7 @@
             </div>
         {% endif %}
 
-        <h2 style="margin-bottom: 20px; text-align: center;">ثبت نام</h2>
+        <h2 style="margin-bottom: 25px; text-align: center;">ورود به سیستم</h2>
 
         <div class="form-group">
             <label for="username">نام کاربری</label>
@@ -168,72 +194,25 @@
             <input type="password" id="password" name="password" required>
         </div>
 
-        <div class="form-group">
-            <label for="confirm-password">تکرار رمز عبور</label>
-            <input type="password" id="confirm-password" name="confirm-password" required>
-        </div>
+        <button type="submit" class="submit-btn">ورود</button>
 
-        <button type="submit" class="submit-btn">ثبت نام</button>
-
-        <div class="login-link">
-            قبلاً ثبت نام کرده‌اید؟ <a href="{% url 'accounts:login' %}">ورود</a>
+        <div class="signup-link">
+            حساب کاربری ندارید؟ <a href="{% url 'accounts:signup' %}">ثبت نام کنید</a>
         </div>
     </form>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.querySelector('.signup-form');
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('confirm-password');
-        const username = document.getElementById('username');
-
-        form.addEventListener('submit', function (e) {
-            let isValid = true;
-            let errorMessage = '';
-
-            if (username.value.length < 3) {
-                errorMessage = 'نام کاربری باید حداقل ۳ حرف باشد';
-                isValid = false;
-            }
-
-            if (password.value.length < 6) {
-                errorMessage = 'رمز عبور باید حداقل ۶ کاراکتر باشد';
-                isValid = false;
-            }
-
-            if (password.value !== confirmPassword.value) {
-                errorMessage = 'رمز عبور و تکرار آن مطابقت ندارند';
-                isValid = false;
-            }
-
-            if (!isValid) {
-                e.preventDefault();
-                showMessage(errorMessage, 'error');
-            }
-        });
-
-        function showMessage(message, type) {
-            const messagesDiv = document.querySelector('.messages') || createMessagesDiv();
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            messageDiv.textContent = message;
-            messagesDiv.appendChild(messageDiv);
-
+        const messages = document.querySelectorAll('.message');
+        messages.forEach(message => {
             setTimeout(() => {
-                messageDiv.remove();
-                if (!messagesDiv.children.length) {
-                    messagesDiv.remove();
-                }
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    message.remove();
+                }, 500);
             }, 3000);
-        }
-
-        function createMessagesDiv() {
-            const div = document.createElement('div');
-            div.className = 'messages';
-            document.body.appendChild(div);
-            return div;
-        }
+        });
     });
 </script>
 </body>

@@ -276,6 +276,7 @@
     </style>
 </head>
 <body>
+{% csrf_token %}
 
 {% include 'include/header.html' %}
 
@@ -432,6 +433,48 @@
         const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&details=${encodeURIComponent(event.details)}&location=${encodeURIComponent(event.location)}&dates=${event.start.replace(/[-:]/g, '')}/${event.start.replace(/[-:]/g, '')}`;
 
         window.open(googleCalendarUrl, '_blank');
+    });
+    document.querySelector('.like-button').addEventListener('click', function () {
+        const button = this;
+        const likeCount = document.querySelector('.like-count');
+
+        // اضافه کردن انیمیشن
+        button.classList.add('animate__animated', 'animate__heartBeat');
+
+        // ارسال درخواست به سرور
+        fetch(`/event/like/{{ event.id }}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // به‌روزرسانی تعداد لایک‌ها
+                    likeCount.innerHTML = `
+                <i class="fas fa-heart" style="color: #ef4444"></i>
+                ${data.likes} لایک
+            `;
+
+                    // غیرفعال کردن دکمه
+                    button.disabled = true;
+                    button.style.backgroundColor = '#9ca3af';
+                    button.innerHTML = `
+                <i class="fas fa-heart"></i>
+                لایک شد
+            `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // حذف کلاس انیمیشن بعد از 1 ثانیه
+                setTimeout(() => {
+                    button.classList.remove('animate__animated', 'animate__heartBeat');
+                }, 1000);
+            });
     });
 
 </script>

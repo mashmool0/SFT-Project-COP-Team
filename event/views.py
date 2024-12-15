@@ -36,3 +36,22 @@ def speaker_detail(request, pk):
         return redirect("home:home")
 
 
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
+
+@require_POST
+def like_event(request, event_id):
+    try:
+        event = Event.objects.get(id=event_id)
+        event.likes += 1
+        event.save()
+        return JsonResponse({
+            'status': 'success',
+            'likes': event.likes
+        })
+    except Event.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'رویداد یافت نشد'
+        }, status=404)
