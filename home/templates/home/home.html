@@ -1,166 +1,453 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>صفحه اصلی - COP Events</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" rel="stylesheet">
+    <title>COP Events</title>
     <style>
+        @font-face {
+            font-family: 'Vazir';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/Vazir.woff2') format('woff2');
+        }
+
         body {
             font-family: 'Vazir', sans-serif;
             background-color: #f4f4f9;
         }
 
-        .navbar {
-            background-color: #343a40;
-        }
-
-        .navbar-brand, .nav-link {
-            color: #ffffff !important;
-        }
-
         .hero-section {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: white;
             padding: 100px 0;
-            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .hero-section h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>') center/cover;
+            animation: pulse 2s infinite;
         }
 
-        .hero-section p {
-            font-size: 1.2rem;
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
         }
 
-        .events-list {
-            margin-top: 50px;
+        .search-box {
+            max-width: 600px;
+            margin: 30px auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .search-box input {
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
         .card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease-out;
         }
 
-        .card img {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
         }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .event-type-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #6366f1;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .event-type-badge {
+            transform: scale(1.05);
+            background: #6366f1;
+            color: white;
+        }
+
+        .filter-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+        }
+
+        .form-select, .form-control {
+            border-radius: 10px;
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus, .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .pagination .page-link {
+            border-radius: 8px;
+            margin: 0 3px;
+            color: #6366f1;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .pagination .page-item.active .page-link {
+            background: #6366f1;
+            color: white;
+        }
+
+        .date-filter {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .filter-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+        }
+
+        .filter-form .form-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-form .form-control,
+        .filter-form .form-select {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-form .form-control:focus,
+        .filter-form .form-select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .filter-form .btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-form .btn-primary {
+            background: #6366f1;
+            border: none;
+        }
+
+        .filter-form .btn-primary:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .filter-form .btn-outline-secondary {
+            color: #6b7280;
+            border-color: #e2e8f0;
+        }
+
+        .filter-form .btn-outline-secondary:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+
+        .datepicker {
+            background: white;
+            cursor: pointer;
+        }
+
     </style>
-    <script>
-        function searchEvents() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                if (title.includes(searchTerm)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-    </script>
 </head>
 <body>
-
 {% include 'include/header.html' %}
 
-<div class="hero-section">
+<!-- Hero Section -->
+<div class="hero-section text-center animate__animated animate__fadeIn">
     <div class="container">
-        <h1>رویداد مورد نظرتان را پیدا کنید</h1>
-        <p class="lead">با کمک تیم COP بهترین رویدادهای دانشگاهی را بیابید و شرکت کنید</p>
+        <h1 class="display-4 animate__animated animate__fadeInDown">رویداد مورد نظرتان را پیدا کنید</h1>
+        <p class="lead animate__animated animate__fadeInUp">با کمک تیم COP بهترین رویدادهای دانشگاهی را بیابید و شرکت
+            کنید</p>
+        <div class="search-box animate__animated animate__fadeInUp animate__delay-1s">
+            <input type="text" id="searchInput" class="form-control form-control-lg"
+                   placeholder="جستجو در رویدادها..." oninput="searchEvents()">
+        </div>
     </div>
 </div>
 
-<div class="container events-list">
-    <h2 class="text-center my-5">لیست ایونت‌ها</h2>
-
-    <!-- نوار جستجو -->
-    <div class="mb-4">
-        <input type="text" id="searchInput" class="form-control" placeholder="جستجو بر اساس عنوان رویداد"
-               oninput="searchEvents()">
-    </div>
-
+<div class="container">
     <div class="row">
+        <!-- فیلترها -->
         <div class="col-md-3">
-            <h5>فیلترها</h5>
-            <form>
-                <!-- فیلترهای موجود -->
-                <div class="mb-3">
-                    <label for="dateFilter" class="form-label">تاریخ برگزاری</label>
-                    <input type="date" class="form-control" id="dateFilter">
-                </div>
-                <div class="mb-3">
-                    <label for="eventTypeFilter" class="form-label">نوع رویداد</label>
-                    <select class="form-select" name="event_type" id="eventTypeFilter">
-                        <option value="" selected>همه</option>
-                        <option value="workshop">کارگاه</option>
-                        <option value="seminar">سمینار</option>
-                        <option value="conference">کنفرانس</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="majorFilter" class="form-label">رشته</label>
-                    <select class="form-select" name="major" id="majorFilter">
-                        <option value="" selected>همه</option>
-                        {% for major in majors %}
-                            <option value="{{ major.id }}">{{ major.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="universityTypeFilter" class="form-label">نوع دانشگاه</label>
-                    <select class="form-select" name="university" id="universityTypeFilter">
-                        <option value="" selected>همه</option>
-                        {% for university in universities %}
-                            <option value="{{ university.id }}">{{ university.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">اعمال فیلترها</button>
+            <div class="filter-card animate__animated animate__fadeInLeft">
+                <h5 class="mb-4">فیلترها</h5>
+                <form method="get" action="{% url 'home:home' %}" class="filter-form">
+                    <!-- جستجو -->
+                    <div class="mb-3">
+                        <label class="form-label">جستجو</label>
+                        <input type="text" name="search" class="form-control" value="{{ selected_filters.search }}"
+                               placeholder="جستجو در رویدادها...">
+                    </div>
 
-            </form>
+                    <!-- فیلتر دانشگاه -->
+                    <div class="mb-3">
+                        <label class="form-label">دانشگاه</label>
+                        <select name="university" class="form-select">
+                            <option value="">همه دانشگاه‌ها</option>
+                            {% for university in universities %}
+                                <option value="{{ university.id }}"
+                                        {% if selected_filters.university|stringformat:"s" == university.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ university.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- فیلتر رشته -->
+                    <div class="mb-3">
+                        <label class="form-label">رشته تحصیلی</label>
+                        <select name="major" class="form-select">
+                            <option value="">همه رشته‌ها</option>
+                            {% for major in majors %}
+                                <option value="{{ major.id }}"
+                                        {% if selected_filters.major|stringformat:"s" == major.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ major.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- فیلتر نوع رویداد -->
+                    <div class="mb-3">
+                        <label class="form-label">نوع رویداد</label>
+                        <select name="event_type" class="form-select">
+                            <option value="">همه انواع</option>
+                            {% for type_value, type_label in event_types %}
+                                <option value="{{ type_value }}"
+                                        {% if selected_filters.event_type == type_value %}selected{% endif %}>
+                                    {{ type_label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- فیلتر تاریخ -->
+                    <div class="mb-3">
+                        <label class="form-label">بازه زمانی</label>
+                        <input type="text" name="date_from" class="form-control mb-2 datepicker"
+                               value="{{ selected_filters.date_from }}" placeholder="از تاریخ">
+                        <input type="text" name="date_to" class="form-control datepicker"
+                               value="{{ selected_filters.date_to }}" placeholder="تا تاریخ">
+                    </div>
+
+                    <!-- دکمه‌های فرم -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-funnel-fill me-1"></i>
+                            اعمال فیلترها
+                        </button>
+                        <a href="{% url 'home:home' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-1"></i>
+                            پاک کردن فیلترها
+                        </a>
+                    </div>
+                </form>
+            </div>
+
         </div>
 
         <div class="col-md-9">
             <div class="row">
                 {% for event in events %}
-                    <div class="col-md-6">
-                        <div class="card">
-                            <a href="{% url 'event:event' event.id %}">
-                                <img src="{{ event.image.url }}" class="card-img-top" alt="عکس رویداد">
-                            </a>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="position-relative">
+                                <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}">
+                                <span class="event-type-badge">
+                                    {% if event.type_of_event == 'kargah' %}کارگاه
+                                    {% elif event.type_of_event == 'seminar' %}سمینار
+                                    {% elif event.type_of_event == 'conferance' %}کنفرانس
+                                    {% elif event.type_of_event == 'dore' %}دوره
+                                    {% elif event.type_of_event == 'webinar' %}وبینار
+                                    {% elif event.type_of_event == 'bootcamp' %}بوتکمپ
+                                    {% endif %}
+                                </span>
+                            </div>
                             <div class="card-body">
                                 <h5 class="card-title">{{ event.title }}</h5>
-                                <p class="card-text">{{ event.description|truncatechars:30 }}</p>
-                                <p class="card-text"><small class="text-muted">تاریخ: {{ event.date }}</small></p>
+                                <p class="card-text">{{ event.small_desc }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar3"></i>
+                                        {{ event.created_at|date:"Y/m/d" }}
+                                    </small>
+                                    {% if event.university %}
+                                        <small class="text-muted">
+                                            <i class="bi bi-building"></i>
+                                            {{ event.university.name }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <a href="{% url 'event:event' event.id %}" class="btn btn-outline-primary w-100">
+                                    مشاهده جزئیات
+                                </a>
                             </div>
                         </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <h3>هیچ رویدادی یافت نشد!</h3>
+                        <p>لطفاً فیلترهای خود را تغییر دهید.</p>
                     </div>
                 {% endfor %}
             </div>
 
-            <!-- نمایش نوار صفحه‌بندی تنها در صورت وجود بیشتر از یک صفحه -->
+            <!-- پجینیشن -->
             {% if page_obj.paginator.num_pages > 1 %}
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center mt-4">
-                        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">قبلی</a>
-                        </li>
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=
+
+
+
+
+
+                                        {{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                    قبلی
+                                </a>
+                            </li>
+                        {% endif %}
+
                         {% for num in page_obj.paginator.page_range %}
                             {% if page_obj.number == num %}
-                                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
-                            {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
-                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=
+
+
+
+
+
+                                            {{ num }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                        {{ num }}
+                                    </a>
+                                </li>
                             {% endif %}
                         {% endfor %}
-                        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">بعدی</a>
-                        </li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=
+
+
+
+
+
+                                        {{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                    بعدی
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </nav>
             {% endif %}
@@ -168,7 +455,58 @@
     </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fa.js"></script>
+<script>
+    // تنظیمات تقویم شمسی
+    flatpickr(".date-filter", {
+        locale: "fa",
+        dateFormat: "Y/m/d",
+        enableTime: false
+    });
+
+    // جستجوی پیشرفته با دیباونس
+    let searchTimeout;
+
+    function searchEvents() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const desc = card.querySelector('.card-text').textContent.toLowerCase();
+                const cardElement = card.parentElement;
+
+                if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+                    cardElement.style.display = '';
+                    cardElement.classList.add('animate__animated', 'animate__fadeIn');
+                } else {
+                    cardElement.style.display = 'none';
+                }
+            });
+        }, 300);
+    }
+
+    // انیمیشن برای کارت‌ها در هنگام اسکرول
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.card').forEach(card => {
+        observer.observe(card);
+    });
+</script>
 </body>
 </html>

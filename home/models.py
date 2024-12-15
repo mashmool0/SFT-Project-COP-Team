@@ -33,6 +33,7 @@ class Event(models.Model):
     university = models.ForeignKey(University, models.SET_NULL, related_name='event_uni', blank=True, null=True)
     type_of_event = models.CharField(choices=TYPE_OF_EVENT, blank=True, null=True, max_length=100)
     major = models.ForeignKey(Major, on_delete=models.SET_NULL, related_name='event_major', blank=True, null=True)
+    date_of_event = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.title
