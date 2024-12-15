@@ -1,22 +1,216 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-4">
-                {% if speaker.image %}
-                    <img src="{{ speaker.image.url }}" class="img-fluid" alt="{{ speaker.fullname }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/150" class="img-fluid" alt="Default Image">
-                {% endif %}
+    <div class="speaker-detail-header" data-aos="fade-down">
+        <div class="container">
+            <h1 class="detail-title">{{ speaker.fullname }}</h1>
+            <div class="expertise-badge">متخصص و سخنران برجسته</div>
+        </div>
+    </div>
+
+    <div class="container speaker-detail-container">
+        <div class="row g-5">
+            <div class="col-lg-4" data-aos="fade-left">
+                <div class="speaker-image-card">
+                    {% if speaker.image %}
+                        <img src="{{ speaker.image.url }}" class="speaker-detail-image" alt="{{ speaker.fullname }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/400x500" class="speaker-detail-image" alt="Default Image">
+                    {% endif %}
+
+                    <div class="social-links-detail">
+                        {% if speaker.linkedin_url %}
+                            <a href="{{ speaker.linkedin_url }}" class="social-link linkedin" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                                <span>پروفایل لینکدین</span>
+                            </a>
+                        {% endif %}
+                        {% if speaker.twitter_url %}
+                            <a href="{{ speaker.twitter_url }}" class="social-link twitter" target="_blank">
+                                <i class="fab fa-twitter"></i>
+                                <span>پروفایل توییتر</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <div class="col-md-8">
-                <h2>{{ speaker.fullname }}</h2>
-                <p>{{ speaker.description }}</p>
-                {% if speaker.linkedin_url %}
-                    <a href="{{ speaker.linkedin_url }}" class="btn btn-link" target="_blank">لینکدین</a>
-                {% endif %}
+
+            <div class="col-lg-8" data-aos="fade-right">
+                <div class="speaker-info-card">
+                    <div class="info-section">
+                        <h3 class="section-title">درباره سخنران</h3>
+                        <div class="description">
+                            {{ speaker.description|linebreaks }}
+                        </div>
+                    </div>
+
+                    {% if speaker.expertise %}
+                        <div class="info-section">
+                            <h3 class="section-title">تخصص‌ها</h3>
+                            <div class="expertise-tags">
+                                {% for expertise in speaker.expertise.all %}
+                                    <span class="expertise-tag">{{ expertise.name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if speaker.events.all %}
+                        <div class="info-section">
+                            <h3 class="section-title">رویدادهای مرتبط</h3>
+                            <div class="related-events">
+                                {% for event in speaker.events.all %}
+                                    <a href="{% url 'event:event_detail' pk=event.id %}" class="event-card">
+                                        <div class="event-date">
+                                            <i class="far fa-calendar-alt"></i>
+                                            {{ event.date|date:"Y/m/d" }}
+                                        </div>
+                                        <div class="event-title">{{ event.title }}</div>
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .speaker-detail-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 3rem 0;
+            color: white;
+            text-align: center;
+            margin-bottom: 3rem;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .detail-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .expertise-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1.1rem;
+        }
+
+        .speaker-detail-container {
+            margin-bottom: 4rem;
+        }
+
+        .speaker-image-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .speaker-detail-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .speaker-image-card:hover .speaker-detail-image {
+            transform: scale(1.05);
+        }
+
+        .social-links-detail {
+            padding: 1.5rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateX(-5px);
+            color: white;
+        }
+
+        .speaker-info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #4f46e5;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            color: #4b5563;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .expertise-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .expertise-tag {
+            background: #f3f4f6;
+            color: #4f46e5;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+
+        .related-events {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .event-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f3f4f6;
+            border-radius: 10px;
+            color: #1f2937;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .event-card:hover {
+            background: #e5e7eb;
+            transform: translateX(-5px);
+            color: #1f2937;
+        }
+
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6b7280;
+        }
+    </style>
 {% endblock %}

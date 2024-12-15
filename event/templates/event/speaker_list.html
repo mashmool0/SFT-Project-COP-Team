@@ -1,25 +1,69 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">سخنرانان</h2>
-    <div class="row">
-        {% for speaker in speakers %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                {% if speaker.image %}
-                <img src="{{ speaker.image.url }}" class="card-img-top" alt="{{ speaker.fullname }}">
-                {% else %}
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Default Image">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ speaker.fullname }}</h5>
-                    <p class="card-text">{{ speaker.description|truncatewords:20 }}</p>
-                    <a href="{% url 'event:speaker_detail' pk=speaker.id %}" class="btn btn-primary">مشاهده جزئیات</a>
-                </div>
-            </div>
+    <div class="page-header" data-aos="fade-down">
+        <div class="container">
+            <h1 class="page-title">سخنرانان برتر</h1>
+            <p class="lead">با متخصصان و سخنرانان برجسته آشنا شوید</p>
         </div>
-        {% endfor %}
     </div>
-</div>
+    <div class="container search-container" data-aos="fade-up">
+        <form method="GET" class="search-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control search-input"
+                       placeholder="جستجو در بین سخنرانان..."
+                       value="{{ request.GET.q }}"
+                       aria-label="جستجوی سخنران">
+                <button class="btn btn-primary search-btn" type="submit">
+                    <i class="fas fa-search"></i>
+                    جستجو
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="container main-container">
+        <div class="row g-4">
+            {% for speaker in speakers %}
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}">
+                    <div class="speaker-card">
+                        <div class="position-relative overflow-hidden">
+                            {% if speaker.image %}
+                                <img src="{{ speaker.image.url }}" class="speaker-image w-100"
+                                     alt="{{ speaker.fullname }}">
+                            {% else %}
+                                <img src="https://via.placeholder.com/300x300" class="speaker-image w-100"
+                                     alt="Default Image">
+                            {% endif %}
+                        </div>
+                        <div class="speaker-info">
+                            <h3 class="speaker-name">{{ speaker.fullname }}</h3>
+                            <p class="speaker-description">{{ speaker.description|truncatewords:20 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'event:speaker_detail' pk=speaker.id %}" class="view-details-btn">
+                                    <i class="fas fa-user"></i>
+                                    مشاهده پروفایل
+                                </a>
+                                <div class="social-links">
+                                    {% if speaker.linkedin_url %}
+                                        <a href="{{ speaker.linkedin_url }}" target="_blank"
+                                           class="social-link linkedin">
+                                            <i class="fab fa-linkedin-in"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if speaker.twitter_url %}
+                                        <a href="{{ speaker.twitter_url }}" target="_blank" class="social-link twitter">
+                                            <i class="fab fa-twitter"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
+
