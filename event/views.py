@@ -7,7 +7,7 @@ def event_view(request, pk):
     try:
         event = Event.objects.get(id=pk)
         speakers = event.speakers.all()  # Assuming a related name 'speaker_set'
-        comments = event.comments.all()  # Assuming a related name 'comment_set'
+        comments = event.comments.all().order_by('-id')  # Assuming a related name 'comment_set'
 
         # اطلاعات دانشگاه
         university = event.university  # اطلاعات دانشگاه مربوط به رویداد
@@ -50,6 +50,34 @@ def like_event(request, event_id):
             'status': 'success',
             'likes': event.likes
         })
+    except Event.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'رویداد یافت نشد'
+        }, status=404)
+
+
+@require_POST
+def add_comment(request, event_id):
+    try:
+        event = Event.objects.get(id=event_id)
+        text = request.POST.get('text')
+
+        if text:
+            comment = Comment.objects.create(
+                event=event,
+                text=text,
+                comment_type='general'
+            )
+
+            return JsonResponse({
+                'status': 'success',
+                'comment': {
+                    'text': comment.text,
+                    'created_at': comment.created_at.strftime('%Y-%m-%d %H:%M'),
+                    'type': comment.get_comment_type_display()
+                }
+            })
     except Event.DoesNotExist:
         return JsonResponse({
             'status': 'error',
