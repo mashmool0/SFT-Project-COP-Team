@@ -206,6 +206,25 @@
             margin-left: 0.5rem;
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .speaker-card {
+            transition: all 0.3s ease;
+        }
+
+        .alert {
+            animation: fadeIn 0.5s ease-in;
+        }
+
     </style>
     {% block extra_css %}{% endblock %}
 </head>
